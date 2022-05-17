@@ -49,10 +49,11 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
  *
  * Authorization required: none
  */
-
+//! TODO: Allow user to filter through the query string
+//! use values => name, minEmployess, maxEmployees, 
 router.get("/", async function (req, res, next) {
   try {
-    const companies = await Company.findAll();
+    const companies = await Company.findAll(req.query);
     return res.json({ companies });
   } catch (err) {
     return next(err);

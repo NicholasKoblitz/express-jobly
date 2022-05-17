@@ -60,7 +60,8 @@ describe("create", function () {
 
 describe("findAll", function () {
   test("works: no filter", async function () {
-    let companies = await Company.findAll();
+   const testReq =  {name: undefined, minEmployees: undefined, maxEmployees: undefined};
+    let companies = await Company.findAll(testReq);
     expect(companies).toEqual([
       {
         handle: "c1",
@@ -85,6 +86,146 @@ describe("findAll", function () {
       },
     ]);
   });
+  test("works: filter => name", async () => {
+    const testReq =  {name: "c", minEmployees: undefined, maxEmployees: undefined};
+    const companies = await Company.findAll(testReq);
+    expect(companies).toEqual([
+      {
+        handle: "c1",
+        name: "C1",
+        description: "Desc1",
+        numEmployees: 1,
+        logoUrl: "http://c1.img",
+      },
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      },
+    ])
+  })
+  test("works: filter => minEmployees", async () => {
+    const testReq =  {name: undefined, minEmployees: 3, maxEmployees: undefined};
+    const companies = await Company.findAll(testReq);
+    expect(companies).toEqual([
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      },
+    ])
+  })
+  test("works: filter => maxEmployees", async () => {
+    const testReq =  {name: undefined, minEmployees: undefined, maxEmployees: 2};
+    const companies = await Company.findAll(testReq);
+    expect(companies).toEqual([
+      {
+        handle: "c1",
+        name: "C1",
+        description: "Desc1",
+        numEmployees: 1,
+        logoUrl: "http://c1.img",
+      },
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      }
+    ])
+  })
+  test("works: filter => name, minEmployees", async () => {
+    const testReq =  {name: "c", minEmployees: 2, maxEmployees: undefined};
+    const companies = await Company.findAll(testReq);
+    expect(companies).toEqual([
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      },
+    ])
+  })
+  test("works: filter => name, maxEmployees", async () => {
+    const testReq =  {name: "c", minEmployees: undefined, maxEmployees: 2};
+    const companies = await Company.findAll(testReq);
+    expect(companies).toEqual([
+      {
+        handle: "c1",
+        name: "C1",
+        description: "Desc1",
+        numEmployees: 1,
+        logoUrl: "http://c1.img",
+      },
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+    ])
+  })
+  test("works: filter => minEmployees, maxEmployees", async () => {
+    const testReq =  {name: undefined, minEmployees: 2, maxEmployees: 3};
+    const companies = await Company.findAll(testReq);
+    expect(companies).toEqual([
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      },
+    ])
+  })
+  test("works: filter => name, minEmployees, maxEmployees", async () => {
+    const testReq =  {name: "c", minEmployees: 2, maxEmployees: 3};
+    const companies = await Company.findAll(testReq);
+    expect(companies).toEqual([
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      },
+    ])
+  })
 });
 
 /************************************** get */
