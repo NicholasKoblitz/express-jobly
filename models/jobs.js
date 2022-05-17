@@ -34,7 +34,7 @@ class Job {
         }
         else if(title && minSalary && hasEquity) {
             const results = await db.query(
-                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                `SELECT id, title, salary, equity, company_handle AS "companyHandle"
                 FROM jobs
                 WHERE title ILIKE '%'||$1||'%' AND salary >= $2 AND NOT equity=0`,
                 [title, minSalary] 
@@ -43,7 +43,7 @@ class Job {
         }
         else if(title && minSalary) {
             const results = await db.query(
-                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                `SELECT id, title, salary, equity, company_handle AS "companyHandle"
                 FROM jobs
                 WHERE title ILIKE '%'||$1||'%' AND salary >= $2`,
                 [title, minSalary] 
@@ -52,7 +52,7 @@ class Job {
         }
         else if(title && hasEquity) {
             const results = await db.query(
-                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                `SELECT id, title, salary, equity, company_handle AS "companyHandle"
                 FROM jobs
                 WHERE title ILIKE '%'||$1||'%' AND NOT equity=0`,
                 [title] 
@@ -61,7 +61,7 @@ class Job {
         }
         else if(minSalary && hasEquity) {
             const results = await db.query(
-                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                `SELECT id, title, salary, equity, company_handle AS "companyHandle"
                 FROM jobs
                 WHERE salary >= $1 AND NOT equity=0`,
                 [minSalary] 
@@ -70,7 +70,7 @@ class Job {
         }
         else if(title) {
             const results = await db.query(
-                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                `SELECT id, title, salary, equity, company_handle AS "companyHandle"
                 FROM jobs
                 WHERE title ILIKE '%'||$1||'%'`,
                 [title] 
@@ -79,7 +79,7 @@ class Job {
         }
         else if(minSalary) {
             const results = await db.query(
-                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                `SELECT id, title, salary, equity, company_handle AS "companyHandle"
                 FROM jobs
                 WHERE salary >= $1`,
                 [minSalary] 
@@ -88,7 +88,7 @@ class Job {
         }
         else if(hasEquity) {
             const results = await db.query(
-                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                `SELECT id, title, salary, equity, company_handle AS "companyHandle"
                 FROM jobs
                 WHERE NOT equity=0`
             )

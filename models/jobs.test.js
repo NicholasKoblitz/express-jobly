@@ -37,28 +37,72 @@ describe("create", () => {
 
 describe("findAll", () => {
     test("works", async () => {
-        const jobs = await Job.findAll();
+        const testReq = {title: undefined, minSalary: undefined, hasEquity: undefined}
+        const jobs = await Job.findAll(testReq);
         expect(jobs).toEqual([
             {
                 id: expect.any(Number),
                 title: "j1",
-                salary: 10,
+                salary: 1,
                 equity: null,
                 companyHandle: 'c1'
             },
             {
                 id: expect.any(Number),
                 title: "j2",
-                salary: 10,
+                salary: 2,
                 equity: "0.3",
                 companyHandle: 'c2'
             },
             {
                 id: expect.any(Number),
                 title: "j3",
-                salary: 10,
+                salary: 3,
                 equity: "0",
                 companyHandle: 'c3'
+            }
+        ])
+    })
+    test("works filter => title", async () => {
+        const jobs = await Job.findAll({title: "j1"});
+        expect(jobs).toEqual([
+            {
+                id: expect.any(Number),
+                title: "j1",
+                salary: 1,
+                equity: null,
+                companyHandle: 'c1'
+            }
+        ])
+    })
+    test("works filter => minSalary", async () => {
+        const jobs = await Job.findAll({minSalary: 2});
+        expect(jobs).toEqual([
+            {
+                id: expect.any(Number),
+                title: "j2",
+                salary: 2,
+                equity: "0.3",
+                companyHandle: 'c2'
+            },
+            {
+                id: expect.any(Number),
+                title: "j3",
+                salary: 3,
+                equity: "0",
+                companyHandle: 'c3'
+            }
+        ])
+    })
+    test("works filter => hasEquity", async () => {
+        const jobs = await Job.findAll({hasEquity: true});
+        expect(jobs).toEqual([
+            {
+                id: expect.any(Number),
+                title: "j2",
+                salary: 2,
+                equity: "0.3",
+                companyHandle: 'c2'
             }
         ])
     })
@@ -76,7 +120,10 @@ describe("get", () => {
     test("works", async () => {
         const testJob = await Job.create(newJob);
         const job = await Job.get(testJob.id)
-        expect(job).toEqual(newJob)
+        expect(job).toEqual({
+            id: testJob.id,
+            ...newJob
+        })
     })
 })
 
