@@ -50,7 +50,6 @@ class Company {
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * 
    * */
-//! TODO: Come back and refactor
   static async findAll(filters) {
     const {name, minEmployees, maxEmployees} = filters;
 
@@ -149,11 +148,6 @@ class Company {
         ORDER BY name`, [maxEmployees]);
     return companiesRes.rows;
     }
-    
-
-    
-    
-    
   }
 
   /** Given a company handle, return data about company.
@@ -166,20 +160,40 @@ class Company {
 
   static async get(handle) {
     const companyRes = await db.query(
-          `SELECT handle,
-                  name,
-                  description,
-                  num_employees AS "numEmployees",
-                  logo_url AS "logoUrl"
-           FROM companies
-           WHERE handle = $1`,
+          `SELECT c.handle,
+                  c.name,
+                  c.description,
+                  c.num_employees AS "numEmployees",
+                  c.logo_url AS "logoUrl",
+                  j.id,
+                  j.title,
+                  j.salary,
+                  j.equity
+           FROM companies AS c
+           JOIN jobs AS j ON c.handle = j.company_handle
+           WHERE c.handle = $1`,
         [handle]);
 
     const company = companyRes.rows[0];
 
     if (!company) throw new NotFoundError(`No company: ${handle}`);
-
-    return company;
+//{ ... other data ... , jobs: [ { id, title, salary, equity}, ... ] }
+    return {
+      handle: company.handle,
+      name: company.name,
+      description: company.description,
+      numEmployees: company.numEmployees,
+      logoUrl: company.logoUrl,
+      jobs: [
+        {
+          id: company.id,
+          title: company.title,
+          salary: company.salary,
+          equity: company.equity
+        }
+      ]
+        
+    }
   }
 
   /** Update company data with `data`.
