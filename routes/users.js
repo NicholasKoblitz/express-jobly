@@ -11,6 +11,8 @@ const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
 const userNewSchema = require("../schemas/userNew.json");
 const userUpdateSchema = require("../schemas/userUpdate.json");
+const res = require("express/lib/response");
+const req = require("express/lib/request");
 
 const router = express.Router();
 
@@ -42,6 +44,29 @@ router.post("/", ensureAdmin, async function (req, res, next) {
     return next(err);
   }
 });
+
+
+
+/** POST /users/:username/jobs/:id
+ * 
+ * Allows logged in users or admins to apply to jobs
+ * 
+ * Takes the users username and job id => {applied: jobId}
+ * 
+ * Authorization Required: Admin / Logged in
+ */
+
+router.post("/:username/jobs/:id", ensureLoggedInOrAdmin, async (req, res, next) => {
+  try {
+    const applied = await User.apply(req.params.username, req.params.id);
+    return res.json({applied: req.params.id});
+  }
+  catch(err) {
+    return next(err);
+  }
+  
+
+})
 
 
 /** GET / => { users: [ {username, firstName, lastName, email }, ... ] }

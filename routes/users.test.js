@@ -5,6 +5,7 @@ const request = require("supertest");
 const db = require("../db.js");
 const app = require("../app");
 const User = require("../models/user");
+const Job = require("../models/jobs")
 
 const {
   commonBeforeAll,
@@ -110,6 +111,37 @@ describe("POST /users", function () {
     expect(resp.statusCode).toEqual(400);
   });
 });
+
+
+/************************************** POST /users/:username/jobs/:id */
+describe("POST /users/:username/jobs/:id", () => {
+  test("works", async () => {
+    const job = await Job.create({
+      title: "new",
+      salary: 10,
+      equity: null,
+      companyHandle: 'c1'
+    })
+    const resp = await request(app)
+    .post(`/users/u1/jobs/${job.id}`)
+    .set("authorization", `Bearer ${u2Token}`);
+
+    expect(resp.body).toEqual({applied: String(job.id)})
+  })
+  test("unathorized", async () => {
+    const job = await Job.create({
+      title: "new",
+      salary: 10,
+      equity: null,
+      companyHandle: 'c1'
+    })
+    const resp = await request(app)
+    .post(`/users/u1/jobs/${job.id}`)
+    expect(resp.statusCode).toEqual(401);
+
+  })
+})
+
 
 /************************************** GET /users */
 
