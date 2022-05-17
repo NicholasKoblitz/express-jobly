@@ -33,11 +33,11 @@ class Job {
 
     static async get(id) {
         const result = await db.query(
-            `SELECT title, salary, equity, company_handle AS "companyHandle"
+            `SELECT id, title, salary, equity, company_handle AS "companyHandle"
             FROM jobs
-            WHERE id=$1`,
+            WHERE id = $1`,
             [id]
-        )
+        );
         
         return result.rows[0];
     }

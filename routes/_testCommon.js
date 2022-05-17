@@ -61,6 +61,25 @@ async function commonBeforeAll() {
     password: "password3",
     isAdmin: false,
   });
+
+  await Job.create({
+    title: "new",
+    salary: 10,
+    equity: null,
+    companyHandle: 'c1'
+  });
+  await Job.create({
+    title: "new",
+    salary: 10,
+    equity: "0.3",
+    companyHandle: 'c2'
+  });
+  await Job.create({
+    title: "new",
+    salary: 10,
+    equity: "0",
+    companyHandle: 'c3'
+  });
 }
 
 async function commonBeforeEach() {
