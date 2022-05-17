@@ -98,21 +98,37 @@ class User {
 
   /** Find all users.
    *
-   * Returns [{ username, first_name, last_name, email, is_admin }, ...]
+   * Returns [{ username, first_name, last_name, email, is_admin, jobs: [jobId, ...] }, ...]
    **/
 
   static async findAll() {
     const result = await db.query(
-          `SELECT username,
-                  first_name AS "firstName",
-                  last_name AS "lastName",
-                  email,
-                  is_admin AS "isAdmin"
-           FROM users
-           ORDER BY username`,
+          `SELECT u.username,
+                  u.first_name AS "firstName",
+                  u.last_name AS "lastName",
+                  u.email,
+                  u.is_admin AS "isAdmin",
+                  a.job_id AS "jobId"
+           FROM users AS u
+           LEFT JOIN applications AS a
+           ON u.username = a.username
+           ORDER BY username`
     );
-
-    return result.rows;
+    const userArr = [];
+    
+    for(let u of result.rows) {
+      userArr.push({
+        username: u.username,
+        firstName: u.firstName,
+        lastName: u.lastName,
+        email: u.email,
+        isAdmin: u.isAdmin,
+        jobs: [
+          u.jobId
+        ]
+      })
+    }
+    return userArr;
   }
 
   /** Given a username, return data about user.

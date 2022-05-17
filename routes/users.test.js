@@ -147,6 +147,15 @@ describe("POST /users/:username/jobs/:id", () => {
 
 describe("GET /users", function () {
   test("works for users", async function () {
+    const job = await Job.create({
+      title: "new",
+      salary: 10,
+      equity: null,
+      companyHandle: 'c1'
+    })
+    await User.apply("u1",job.id)
+    await User.apply("u2",job.id)
+    await User.apply("u3",job.id)
     const resp = await request(app)
         .get("/users")
         .set("authorization", `Bearer ${u2Token}`);
@@ -158,6 +167,9 @@ describe("GET /users", function () {
           lastName: "U1L",
           email: "user1@user.com",
           isAdmin: false,
+          jobs: [
+            job.id
+          ]
         },
         {
           username: "u2",
@@ -165,6 +177,9 @@ describe("GET /users", function () {
           lastName: "U2L",
           email: "user2@user.com",
           isAdmin: true,
+          jobs: [
+            job.id
+          ]
         },
         {
           username: "u3",
@@ -172,6 +187,9 @@ describe("GET /users", function () {
           lastName: "U3L",
           email: "user3@user.com",
           isAdmin: false,
+          jobs: [
+            job.id
+          ]
         },
       ],
     });

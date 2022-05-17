@@ -69,7 +69,7 @@ router.post("/:username/jobs/:id", ensureLoggedInOrAdmin, async (req, res, next)
 })
 
 
-/** GET / => { users: [ {username, firstName, lastName, email }, ... ] }
+/** GET / => { users: [ {username, firstName, lastName, email, isAdmin, jobs: [jobId ...] }, ... ] }
  *
  * Returns list of all users.
  *
