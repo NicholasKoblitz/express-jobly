@@ -45,10 +45,12 @@ class Company {
   }
 
   /** Find all companies.
+   * Accepts an object to check for filter values
    *
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
+   * 
    * */
-
+//! TODO: Come back and refactor
   static async findAll(filters) {
     const {name, minEmployees, maxEmployees} = filters;
 
