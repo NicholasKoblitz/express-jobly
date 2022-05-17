@@ -204,7 +204,26 @@ class User {
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
   }
+
+  /** Applies to a job based on job id 
+   * 
+   * return {username, jobId}
+  */
+
+  static async apply(username, jobId) {
+    const result = await db.query(
+      `INSERT INTO applications
+      (username, job_id)
+      VALUES ($1, $2)
+      RETURNING username, job_id AS "jobId"`,
+      [username, jobId]
+    );
+    return result.rows[0];
+  }
+
+
 }
+
 
 
 module.exports = User;
