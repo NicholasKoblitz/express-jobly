@@ -15,6 +15,15 @@ const jobUpdateSchema = require("../schemas/jobUpdate.json");
 const router = new express.Router();
 
 
+/** POST / { job } => { job }
+ * 
+ * job should be { title, salary, equity, company_handle }
+ * 
+ * Returns { id, title, salary, equity, company_haandle }
+ * 
+ * Authorization requited: Admin
+ */
+
 router.post("/", ensureAdmin, async (req, res, next) => {
     try {
         const validator = jsonschema.validate(req.body, jobNewSchema);
@@ -32,9 +41,21 @@ router.post("/", ensureAdmin, async (req, res, next) => {
 })
 
 
+/** GET / => 
+ *    { jobs: [ { id, title, salary, equity, company_handle }, ... ] }
+ * 
+ * Can filter on provied search filters:
+ * - title (will find case-insensitive, partial matches)
+ * - minSalary
+ * - hasEquity
+ * 
+ * Authorization Required: None
+ */
+
 router.get("/", async (req, res, next) => {
     try {
-        const jobs = await Job.findAll();
+        const jobs = await Job.findAll(req.query);
+        console.log(req.query)
         return res.json({jobs});
     }
     catch(err) {
@@ -43,6 +64,12 @@ router.get("/", async (req, res, next) => {
 })
 
 
+/** GET /[id] => { job }
+ *  
+ * Job is { id, title, salary, equity, company_handle }
+ * 
+ * Authorization Required: None
+ */
 
 router.get("/:id", async (req, res, next) => {
     try {
@@ -54,6 +81,17 @@ router.get("/:id", async (req, res, next) => {
     }
 })
 
+
+/** PATCH /[id] { fld1, fld2, ... } => { job }
+ * 
+ * Patches job data
+ * 
+ * fields can be: { title, salary, equity }
+ * 
+ * Returns { id, title, salary, equity, company_handle }
+ * 
+ * Authorization Required: Admin
+*/
 
 
 router.patch("/:id", ensureAdmin, async (req, res, next) => {
@@ -71,6 +109,11 @@ router.patch("/:id", ensureAdmin, async (req, res, next) => {
         return next(err);
     }
 })
+
+/** DELETE /[id] => {deleted: id} 
+ * 
+ * Authorization Required: Admin
+*/
 
 
 router.delete("/:id", ensureAdmin, async (req, res, next) => {

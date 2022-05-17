@@ -21,14 +21,83 @@ class Job {
       return job;
     }
 
-    static async findAll() {
-        const results = await db.query(
-            `SELECT id, title, salary, equity, company_handle AS "companyHandle"
-            FROM jobs
-            ORDER BY title`
-        );
+    static async findAll(filters) {
+        const {title, minSalary, hasEquity} = filters;
 
-        return results.rows;
+        if(!title && !minSalary && !hasEquity) {
+            const results = await db.query(
+                `SELECT id, title, salary, equity, company_handle AS "companyHandle"
+                FROM jobs
+                ORDER BY title`
+            );
+            return results.rows;
+        }
+        else if(title && minSalary && hasEquity) {
+            const results = await db.query(
+                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                FROM jobs
+                WHERE title ILIKE '%'||$1||'%' AND salary >= $2 AND NOT equity=0`,
+                [title, minSalary] 
+            )
+            return results.rows;
+        }
+        else if(title && minSalary) {
+            const results = await db.query(
+                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                FROM jobs
+                WHERE title ILIKE '%'||$1||'%' AND salary >= $2`,
+                [title, minSalary] 
+            )
+            return results.rows;
+        }
+        else if(title && hasEquity) {
+            const results = await db.query(
+                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                FROM jobs
+                WHERE title ILIKE '%'||$1||'%' AND NOT equity=0`,
+                [title] 
+            )
+            return results.rows;
+        }
+        else if(minSalary && hasEquity) {
+            const results = await db.query(
+                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                FROM jobs
+                WHERE salary >= $1 AND NOT equity=0`,
+                [minSalary] 
+            )
+            return results.rows;
+        }
+        else if(title) {
+            const results = await db.query(
+                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                FROM jobs
+                WHERE title ILIKE '%'||$1||'%'`,
+                [title] 
+            )
+            return results.rows;
+        }
+        else if(minSalary) {
+            const results = await db.query(
+                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                FROM jobs
+                WHERE salary >= $1`,
+                [minSalary] 
+            )
+            return results.rows;
+        }
+        else if(hasEquity) {
+            const results = await db.query(
+                `SELECT id, title, salary, equity, company_handle AS companyHandle
+                FROM jobs
+                WHERE NOT equity=0`
+            )
+            return results.rows;
+        }
+
+        
+
+        
     }
 
     static async get(id) {
