@@ -84,7 +84,7 @@ describe("ensureAdmin", () => {
   test("works", () => {
     expect.assertions(1);
     const req = {};
-    const res = {locals: {user: {username: "test", is_admin: true}}}
+    const res = {locals: {user: {username: "test", isAdmin: true}}}
     const next = function (err) {
       expect(err).toBeFalsy();
     };
