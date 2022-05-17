@@ -54,7 +54,7 @@ class Company {
   static async findAll(filters) {
     const {name, minEmployees, maxEmployees} = filters;
 
-    if(name === undefined && minEmployees === undefined && maxEmployees === undefined) {
+    if(!name && !minEmployees && !maxEmployees) {
       const companiesRes = await db.query(
         `SELECT handle,
             name,
@@ -65,7 +65,7 @@ class Company {
         ORDER BY name`);
     return companiesRes.rows;
     }
-    else if(name !== undefined && minEmployees !== undefined && maxEmployees !== undefined) {
+    else if(name && minEmployees && maxEmployees ) {
       const companiesRes = await db.query(
         `SELECT handle,
             name,
@@ -77,7 +77,7 @@ class Company {
         ORDER BY name`, [name, minEmployees, maxEmployees]);
     return companiesRes.rows;
     }
-    else if(maxEmployees !== undefined && minEmployees !== undefined) {
+    else if(maxEmployees && minEmployees ) {
       const companiesRes = await db.query(
         `SELECT handle,
             name,
@@ -89,7 +89,7 @@ class Company {
         ORDER BY name`, [minEmployees, maxEmployees]);
     return companiesRes.rows;
     }
-    else if(name !== undefined && minEmployees !== undefined) {
+    else if(name && minEmployees) {
       const companiesRes = await db.query(
         `SELECT handle,
             name,
@@ -101,7 +101,7 @@ class Company {
         ORDER BY name`, [name, minEmployees]);
     return companiesRes.rows;
     }
-    else if(name !== undefined && maxEmployees !== undefined) {
+    else if(name && maxEmployees) {
       const companiesRes = await db.query(
         `SELECT handle,
             name,
@@ -113,7 +113,7 @@ class Company {
         ORDER BY name`, [name, maxEmployees]);
     return companiesRes.rows;
     }
-    else if(name !== undefined) {
+    else if(name) {
       const companiesRes = await db.query(
         `SELECT handle,
             name,
@@ -125,7 +125,7 @@ class Company {
         ORDER BY name`, [name]);
     return companiesRes.rows;
     }
-    else if(minEmployees !== undefined) {
+    else if(minEmployees) {
       const companiesRes = await db.query(
         `SELECT handle,
             name,
@@ -137,7 +137,7 @@ class Company {
         ORDER BY name`, [minEmployees]);
     return companiesRes.rows;
     }
-    else if(maxEmployees !== undefined) {
+    else if(maxEmployees) {
       const companiesRes = await db.query(
         `SELECT handle,
             name,
