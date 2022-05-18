@@ -121,6 +121,14 @@ describe("GET /companies/:handle", function () {
         description: "Desc1",
         numEmployees: 1,
         logoUrl: "http://c1.img",
+        jobs: [
+          {
+            id: expect.any(Number),
+            title: "new",
+            salary: 10,
+            equity: null
+          }
+        ]
       },
     });
   });
@@ -134,6 +142,14 @@ describe("GET /companies/:handle", function () {
         description: "Desc2",
         numEmployees: 2,
         logoUrl: "http://c2.img",
+        jobs: [
+          {
+            id: expect.any(Number),
+            title: "new",
+            salary: 10,
+            equity: "0.3"
+          }
+        ]
       },
     });
   });
