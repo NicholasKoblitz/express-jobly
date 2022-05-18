@@ -64,6 +64,9 @@ class Company {
         ORDER BY name`);
     return companiesRes.rows;
     }
+    else if(minEmployees > maxEmployees) {
+      throw new BadRequestError(`minEmployees can not be greater than maxEmployees`);
+    }
     else if(name && minEmployees && maxEmployees ) {
       const companiesRes = await db.query(
         `SELECT handle,

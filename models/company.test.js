@@ -226,6 +226,15 @@ describe("findAll", function () {
       },
     ])
   })
+  test("minEmployees can not be greater than maxEmployees", async () => {
+    try {
+      const testReq = {minEmployees: 10, maxEmployees: 1};
+      const response = await Company.findAll(testReq);
+      fail();
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
+    }
+  })
 });
 
 /************************************** get */
